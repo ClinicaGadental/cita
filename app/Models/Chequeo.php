@@ -14,4 +14,14 @@ class Chequeo extends Model
     {
         return $this->belongsTo(User::class, 'doctor');
     }
+
+    public function dientes()
+    {
+        return $this->hasMany(Tooth::class, 'chequeo_id');
+    }
+
+    public function radiografia()
+    {
+        return $this->hasMany(Radiografias::class, 'chequeo_id');
+    }
 }

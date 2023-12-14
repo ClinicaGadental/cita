@@ -28,6 +28,14 @@ class User extends Authenticatable
         'address',
         'phone',
         'role',
+        'imagen',
+        'whatsapp',
+        'red_social',
+        'musica',
+        'profesion',
+        'alteraciones',
+        'como_conocio',
+        'historial',
     ];
 
     /**

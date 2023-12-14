@@ -14,7 +14,7 @@ class PatientController extends Controller
         return view('patients.index', compact('patients'));
     }
 
-    
+
     public function create()
     {
         return view('patients.create');
@@ -26,7 +26,7 @@ class PatientController extends Controller
         return $odontogramaController->show();
     }
 
-    
+
     public function store(Request $request)
     {
         $rules = [
@@ -49,11 +49,11 @@ class PatientController extends Controller
         $this->validate($request, $rules, $messages);
 
         User::create(
-            $request->only('name','email','edad','address','phone')
-            + [
-                'role' => 'paciente',
-                'password' => bcrypt($request->input('password'))
-            ]
+            $request->only('name', 'email', 'edad', 'dui', 'address', 'phone', 'whatsapp', 'red_social', 'musica', 'profesion', 'alteraciones', 'como_conocio', 'historial')
+                + [
+                    'role' => 'paciente',
+                    'password' => bcrypt($request->input('password'))
+                ]
         );
         $notification = 'El paciente se ha registrado correctamente.';
         return redirect('/pacientes')->with(compact('notification'));
@@ -76,7 +76,7 @@ class PatientController extends Controller
         return view('patients.edit', compact('patient'));
     }
 
-   
+
     public function update(Request $request, $id)
     {
         $rules = [
@@ -99,10 +99,10 @@ class PatientController extends Controller
         $this->validate($request, $rules, $messages);
         $user = User::Patients()->findOrFail($id);
 
-        $data = $request->only('name','email','edad','address','phone');
+        $data = $request->only('name', 'email', 'edad', 'dui', 'address', 'phone', 'whatsapp', 'red_social', 'musica', 'profesion', 'alteraciones', 'como_conocio', 'historial');
         $password = $request->input('password');
 
-        if($password)
+        if ($password)
             $data['password'] = bcrypt($password);
 
         $user->fill($data);
@@ -116,26 +116,25 @@ class PatientController extends Controller
     {
         $user = User::findOrFail($id);
         $PacienteName = $user->name;
-    
+
         $user->status = 'dado_de_baja';
         $user->save();
-    
+
         $notification = "El paciente $PacienteName fue dado de baja correctamente";
-    
+
         return redirect('/pacientes')->with(compact('notification'));
     }
-    
+
     public function reactivate($id)
     {
         $user = User::findOrFail($id);
         $PacienteName = $user->name;
-    
+
         $user->status = 'activo';
         $user->save();
-    
+
         $notification = "El paciente $PacienteName ha sido reactivado correctamente.";
-    
+
         return redirect('/pacientes')->with(compact('notification'));
     }
-    
 }

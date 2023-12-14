@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Chequeo;
+use App\Models\Radiografias;
 use App\Models\Tooth;
 use App\Models\User;
 
@@ -51,21 +52,21 @@ class ChequeoController extends Controller
     {
 
         $chequeo = Chequeo::find($id);
-        $dientes = Tooth::where('patient_id', $chequeo->patient_id)->get(); // obtengo todos los dientes
-        return view('chequeo.edit', compact('chequeo', 'dientes'));
+        $dientes = Tooth::where('chequeo_id', $id)->get(); // obtengo todos los dientes
+        $radiografias = Radiografias::where('chequeo_id', $id)->get();
+        return view('chequeo.edit', compact('chequeo', 'dientes', 'id', 'radiografias'));
     }
 
     public function destroy($id)
-{
-    $chequeo = Chequeo::find($id);
+    {
+        $chequeo = Chequeo::find($id);
 
-    if (!$chequeo) {
-        return response()->json(['error' => 'Chequeo no encontrado'], 404);
+        if (!$chequeo) {
+            return response()->json(['error' => 'Chequeo no encontrado'], 404);
+        }
+
+        $chequeo->delete();
+
+        return redirect()->route('chequeo.index')->with('success', 'Chequeo eliminado correctamente');
     }
-
-    $chequeo->delete();
-
-    return redirect()->route('chequeo.index')->with('success', 'Chequeo eliminado correctamente');
-}
-
 }

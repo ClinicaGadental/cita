@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Spatie\DbDumper\Databases\MySql;
 
 class BackupController extends Controller
 {
@@ -17,12 +18,13 @@ class BackupController extends Controller
 
     public function downloadPhpMyAdmin()
     {
-        $backupPath = 'C:\Users\DELL\Downloads\users.sql';
-        if (!file_exists($backupPath)) {
-            return back()->with('error', 'El archivo users.sql no se encontró en la ruta especificada.');
+        $file = public_path('citamedica.sql');
+        if (file_exists($file)) {
+            $nombreDescarga = 'citamedica-' . date('d-m-Y') . '.sql';
+            return response()->download($file, $nombreDescarga);
+        } else {
+            abort(404, 'Archivo no encontrado');
         }
-
-        return response()->download($backupPath, 'users.sql');
     }
 
     public function downloadMySQL()
